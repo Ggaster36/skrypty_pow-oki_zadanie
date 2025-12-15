@@ -106,7 +106,7 @@ scp $magazyn* "$host_docelowy@$ipdom:$katalog_docelowy"
 
 if [ $? -eq 0 ]; then
 
-rm -f * okres$numer_okresu-$start_okres-$koniec_okres.tgz
+rm -f * 
 
 cd $tutaj_jestem
 czas="`date +%d-%m-%Y` `date +%T`"
@@ -126,6 +126,7 @@ cd $tutaj_jestem
 czas="`date +%d-%m-%Y` `date +%T`"
 echo $czas "nie ma kopi z żadnego okresu zatrzymanie archiwizacji i kontynuacja skryptu">>skrypt.log
 fi
+
 
 
 
@@ -192,6 +193,45 @@ source okres.conf
 czas="`date +%d-%m-%Y` `date +%T`"
 echo $czas "ponowne połączenie się z plikiem konfiguracyjnym okresu">>skrypt.log
 fi
+
+if [[ -z $(ls -A $magazyn) ]]; then 
+cd $tutaj_jestem
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "brak zaległych zarchiwizowanych kopii ontynuowanie skryptu">>skrypt.log
+else
+cd $tutaj_jestem
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "próba wysłania zaległej zarchiwizowanej kopii na serwer">>skrypt.log
+
+ping $ipdom
+
+
+if [ $? -eq 0 ]; then
+
+cd $magazyn
+scp $magazyn* "$host_docelowy@$ipdom:$katalog_docelowy"
+
+if [ $? -eq 0 ]; then
+
+rm -f * 
+
+cd $tutaj_jestem
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "przesłanie archiwizowanej kopii do wybranego katalogu na serwerze">>skrypt.log
+else
+cd $tutaj_jestem
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "nieudało się przesłać zarchiwizowanych kopii przetrzymanie kopii do następnej próby">>skrypt.log
+fi
+else
+cd $tutaj_jestem
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "nieudało się połączyć z serwerem zaprzestanie próby wysłania zarchiwizowanych kopii na serwer">>skrypt.log
+fi
+fi
+
+
+
 
 
 else
@@ -344,6 +384,8 @@ log="skrypt-`date +%d-%m-%Y-%H-%M-%S`.log"
 mv skrypt.log $log
 cp $log $logi
 rm -f $log
+
+
 
 rm lock
 fi
