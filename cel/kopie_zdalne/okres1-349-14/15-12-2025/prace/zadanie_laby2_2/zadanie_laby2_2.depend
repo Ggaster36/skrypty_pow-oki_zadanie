@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1762284754 source:c:\prace\zadanie_laby2_2\main.cpp
+	<iostream>
+	<cmath>
+	<string>
+
