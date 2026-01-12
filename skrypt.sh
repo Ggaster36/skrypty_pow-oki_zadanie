@@ -57,13 +57,15 @@ echo $czas "utworzenie pliku lock aby skrypt nie nachodził na siebie i rozpocz�
 
 if [[ -e okres.conf ]]; then
 if [[ $okres_typ = "D" ]]; then
-data=$(date +%j)
+data=$(($(date +%-j) + 1 ))
+
+
 
 elif [[ $okres_typ = "T" ]]; then
-data=$(date +%j)
+data=$(($(date +%-j) + 1 ))
 
 elif [[ $okres_typ = "M" ]]; then
-data=$(date +%j)
+data=$(($(date +%-j) + 1 ))
 fi
 czas="`date +%d-%m-%Y` `date +%T`"
 echo $czas "wykrycie typu czasu okresu i sprawdzenie bieżącej daty">>skrypt.log
@@ -81,7 +83,9 @@ echo $czas "próba wysłania zaległej zarchiwizowanej kopii na serwer">>skrypt.
 ping $ipdom
 
 
+
 if [ $? -eq 0 ]; then
+
 
 cd $magazyn
 scp $magazyn* "$host_docelowy@$ipdom:$katalog_docelowy"
@@ -104,6 +108,8 @@ czas="`date +%d-%m-%Y` `date +%T`"
 echo $czas "nieudało się połączyć z serwerem zaprzestanie próby wysłania zarchiwizowanych kopii na serwer">>skrypt.log
 fi
 fi
+
+
 
 
 
@@ -140,7 +146,6 @@ ping $ipdom
 
 
 if [ $? -eq 0 ]; then
-
 cd $magazyn
 scp $magazyn* "$host_docelowy@$ipdom:$katalog_docelowy"
 
@@ -156,6 +161,7 @@ cd $tutaj_jestem
 czas="`date +%d-%m-%Y` `date +%T`"
 echo $czas "nieudało się przesłać zarchiwizowanych kopii przetrzymanie kopii do następnej próby">>skrypt.log
 fi
+
 else
 cd $tutaj_jestem
 czas="`date +%d-%m-%Y` `date +%T`"
@@ -177,19 +183,19 @@ echo "#plik konfiguracyjny okresu jest potrzebny do poprawnego działania skrypt
 liczba2=$(($numer_okresu + 1))
 echo numer_okresu="$liczba2">>okres.conf
 echo start_okres=$(date +%Y-%m-%d)>>okres.conf
-echo start_okresl="`date +%j`">>okres.conf
+echo start_okresl="`date +%-j`">>okres.conf
 echo rokp="`date +%Y`">>okres.conf
 echo rokk="`date +%Y`">>okres.conf
-liczba=$(($(date +%j) + $okres))
+liczba=$(($(date +%-j) + 1 + $okres))
 echo koniec_okresl="$liczba">>okres.conf
 dni=$(( $okres * 1 ))
 echo koniec_okres=$(date -d "$start_okresl + $dni days" +'%Y-%m-%d')>>okres.conf
 
-if [[ $liczba > 365 ]]; then
+if [[ $liczba > 366 ]]; then
 echo "#plik konfiguracyjny okresu jest potrzebny do poprawnego działania skryptu nie usuwaj i edytuj na własną odpowiedzialność">okres.conf
 echo numer_okresu="$liczba2">>okres.conf
 echo start_okres=$(date +%Y-%m-%d)>>okres.conf
-echo start_okresl="`date +%j`">>okres.conf
+echo start_okresl="`date +%-j`">>okres.conf
 echo rokp="`date +%Y`">>okres.conf
 echo rokk=$(($(date +%Y) + 1))>>okres.conf
 liczba3=$(((365 - $liczba) * -1))
@@ -206,19 +212,19 @@ echo "#plik konfiguracyjny okresu jest potrzebny do poprawnego działania skrypt
 liczba2=$(($numer_okresu + 1))
 echo numer_okresu="$liczba2">>okres.conf
 echo start_okres=$(date +%Y-%m-%d)>>okres.conf
-echo start_okresl=`date +%j`>>okres.conf
+echo start_okresl=`date +%-j`>>okres.conf
 echo rokp="`date +%Y`">>okres.conf
 echo rokk="`date +%Y`">>okres.conf
-liczba=$(($(date +%j) + $okres * 7))
+liczba=$(($(date +%-j) + 1 + $okres * 7))
 echo "koniec_okresl=$liczba">>okres.conf
 dni=$(( $okres * 7 ))
 echo koniec_okres=$(date -d "$start_okresl + $dni days" +'%Y-%m-%d')>>okres.conf
 
-if [[ $liczba > 365 ]]; then
+if [[ $liczba > 366 ]]; then
 echo "#plik konfiguracyjny okresu jest potrzebny do poprawnego działania skryptu nie usuwaj i edytuj na własną odpowiedzialność">okres.conf
 echo numer_okresu="$liczba2">>okres.conf
 echo start_okres=$(date +%Y-%m-%d)>>okres.conf
-echo start_okresl="`date +%j`">>okres.conf
+echo start_okresl="`date +%-j`">>okres.conf
 echo rokp="`date +%Y`">>okres.conf
 echo rokk=$(($(date +%Y) + 1))>>okres.conf
 liczba3=$(((365 - $liczba) * -1))
@@ -235,19 +241,19 @@ echo "#plik konfiguracyjny okresu jest potrzebny do poprawnego działania skrypt
 liczba2=$(($numer_okresu + 1))
 echo numer_okresu="$liczba2">>okres.conf
 echo start_okres=$(date +%Y-%m-%d)>>okres.conf
-echo start_okresl="`date +%j`">>okres.conf
+echo start_okresl="`date +%-j`">>okres.conf
 echo rokp="`date +%Y`">>okres.conf
 echo rokk="`date +%Y`">>okres.conf
-liczba=$(($(date +%j) + $okres * 30))
+liczba=$(($(date +%-j) + 1 + $okres * 30))
 echo koniec_okresl="$liczba">>okres.conf
 dni=$(( $okres * 30 ))
 echo koniec_okres=$(date -d "$start_okresl + $dni days" +'%Y-%m-%d')>>okres.conf
 
-if [[ $liczba > 365 ]]; then
+if [[ $liczba > 366 ]]; then
 echo "#plik konfiguracyjny okresu jest potrzebny do poprawnego działania skryptu nie usuwaj i edytuj na własną odpowiedzialność">okres.conf
 echo numer_okresu="$liczba2">>okres.conf
 echo start_okres=$(date +%Y-%m-%d)>>okres.conf
-echo start_okresl="`date +%j`">>okres.conf
+echo start_okresl="`date +%-j`">>okres.conf
 echo rokp="`date +%Y`">>okres.conf
 echo rokk=$(($(date +%Y) + 1))>>okres.conf
 liczba3=$(((365 - $liczba) * -1))
@@ -279,20 +285,20 @@ echo "#plik konfiguracyjny okresu jest potrzebny do poprawnego działania skrypt
 liczba2=1
 echo numer_okresu="$liczba2">>okres.conf
 echo start_okres=$(date +%Y-%m-%d)>>okres.conf
-echo start_okresl="`date +%j`">>okres.conf
+echo start_okresl="`date +%-j`">>okres.conf
 echo rokp="`date +%Y`">>okres.conf
 echo rokk="`date +%Y`">>okres.conf
-liczba=$(($(date +%j) + $okres))
+liczba=$(($(date +%-j) + 1 + $okres))
 echo koniec_okresl="$liczba">>okres.conf
 dni=$(( $okres * 1 ))
 echo koniec_okres=$(date -d "$start_okresl + $dni days" +'%Y-%m-%d')>>okres.conf
 
-if [[ $liczba > 365 ]]; then
+if [[ $liczba > 366 ]]; then
 echo "#plik konfiguracyjny okresu jest potrzebny do poprawnego działania skryptu nie usuwaj i edytuj na własną odpowiedzialność">okres.conf
 liczba2=1
 echo numer_okresu="$liczba2">>okres.conf
 echo start_okres=$(date +%Y-%m-%d)>>okres.conf
-echo start_okresl="`date +%j`">>okres.conf
+echo start_okresl="`date +%-j`">>okres.conf
 echo rokp="`date +%Y`">>okres.conf
 echo rokk=$(($(date +%Y) + 1))>>okres.conf
 liczba3=$(((365 - $liczba) * -1))
@@ -309,20 +315,20 @@ echo "#plik konfiguracyjny okresu jest potrzebny do poprawnego działania skrypt
 liczba2=1
 echo numer_okresu="$liczba2">>okres.conf
 echo start_okres=$(date +%Y-%m-%d)>>okres.conf
-echo start_okresl="`date +%j`">>okres.conf
+echo start_okresl="`date +%-j`">>okres.conf
 echo rokp="`date +%Y`">>okres.conf
 echo rokk="`date +%Y`">>okres.conf
-liczba=$(($(date +%j) + $okres * 7))
+liczba=$(($(date +%-j) + 1 + $okres * 7))
 echo koniec_okresl="$liczba">>okres.conf
 dni=$(( $okres * 7 ))
 echo koniec_okres=$(date -d "$start_okresl + $dni days" +'%Y-%m-%d')>>okres.conf
 
-if [[ $liczba > 365 ]]; then
+if [[ $liczba > 366 ]]; then
 echo "#plik konfiguracyjny okresu jest potrzebny do poprawnego działania skryptu nie usuwaj i edytuj na własną odpowiedzialność">okres.conf
 liczba2=1
 echo numer_okresu="$liczba2">>okres.conf
 echo start_okres=$(date +%Y-%m-%d)>>okres.conf
-echo start_okresl="`date +%j`">>okres.conf
+echo start_okresl="`date +%-j`">>okres.conf
 echo rokp="`date +%Y`">>okres.conf
 echo rokk=$(($(date +%Y) + 1))>>okres.conf
 liczba3=$(((365 - $liczba) * -1))
@@ -339,20 +345,20 @@ echo "#plik konfiguracyjny okresu jest potrzebny do poprawnego działania skrypt
 liczba2=1
 echo numer_okresu="$liczba2">>okres.conf
 echo start_okres=$(date +%Y-%m-%d)>>okres.conf
-echo start_okresl="`date +%j`">>okres.conf
+echo start_okresl="`date +%-j`">>okres.conf
 echo rokp=$(date +%Y)>>okres.conf
 echo rokk="`date +%Y`">>okres.conf
-liczba=$(($(date +%j) + $okres * 30))
+liczba=$(($(date +%-j) + 1 + $okres * 30))
 echo koniec_okresl="$liczba">>okres.conf
 dni=$(( $okres * 30 ))
 echo koniec_okres=$(date -d "$start_okresl + $dni days" +'%Y-%m-%d')>>okres.conf
 
-if [[ $liczba > 365 ]]; then
+if [[ $liczba > 366 ]]; then
 echo "#plik konfiguracyjny okresu jest potrzebny do poprawnego działania skryptu nie usuwaj i edytuj na własną odpowiedzialność">okres.conf
 liczba2=1
 echo numer_okresu="$liczba2">>okres.conf
 echo start_okres=$(date +%Y-%m-%d)>>okres.conf
-echo start_okresl="`date +%j`">>okres.conf
+echo start_okresl="`date +%-j`">>okres.conf
 echo rokp=$(date +%Y)>>okres.conf
 echo rokk=$(($(date +%Y) + 1))>>okres.conf
 liczba3=$(((365 - $liczba) * -1))
@@ -375,37 +381,74 @@ fi
 
 katalog=`date +%d-%m-%Y`
 
-if [[ -x $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/$katalog ]]; then
-cp -r $cel $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/$katalog
+cd $cel
+if [ -d ".git" ]; then
+cd $tutaj_jestem
 czas="`date +%d-%m-%Y` `date +%T`"
-echo $czas "utworzenie kopii lokalnej i zapisanie jej w $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/$katalog">>skrypt.log
-elif [[ -x $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres ]]; then
-cd $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres
+echo $czas "wykryto że kopiowany katalog to repozytorium">>skrypt.log
+
+if [[ -x $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/repozytoria/$katalog ]]; then
+cp -r $cel $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/repozytoria/$katalog
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "utworzenie kopii lokalnej i zapisanie jej w $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/repozytoria/$katalog">>skrypt.log
+
+elif [[ -x $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/repozytoria ]]; then
+cd $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/repozytoria
 mkdir $katalog
 cd $tutaj_jestem
 czas="`date +%d-%m-%Y` `date +%T`"
 echo $czas "utworzenie katalogu $katalog">>skrypt.log
-cp -r $cel $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/$katalog
+cp -r $cel $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/repozytoria/$katalog
 czas="`date +%d-%m-%Y` `date +%T`"
-echo $czas "utworzenie kopii lokalnej i zapisanie jej w $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/$katalog">>skrypt.log
-elif [[ -x $katalog_z_kopiami/kopie_zdalne ]]; then
-cd $katalog_z_kopiami/kopie_zdalne
+echo $czas "utworzenie kopii lokalnej i zapisanie jej w $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/repozytoria/$katalog">>skrypt.log
+
+elif [[ -x $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres ]]; then
+cd $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres
+mkdir repozytoria
+cd $tutaj_jestem
+
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "utworzenie katalogu repozytoria">>skrypt.log
+
+
+cd  $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/repozytoria
+mkdir $katalog
+cd $tutaj_jestem
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "utworzenie katalogu $katalog">>skrypt.log
+
+cd $tutaj_jestem
+cp -r $cel $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/repozytoria/$katalog
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "utworzenie kopii lokalnej i zapisanie jej w $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/repozytoria/$katalog">>skrypt.log
+
+elif [[ -x $katalog_z_kopiami/kopie_zdalne/ ]]; then
+cd $katalog_z_kopiami/kopie_zdalne/
 mkdir okres$numer_okresu-$start_okres-$koniec_okres
 cd $tutaj_jestem
 
 czas="`date +%d-%m-%Y` `date +%T`"
 echo $czas "utworzenie katalogu okres$numer_okresu-$start_okres-$koniec_okres">>skrypt.log
 
-cd  $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres
+cd $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres
+mkdir repozytoria
+cd $tutaj_jestem
+
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "utworzenie katalogu repozytoria">>skrypt.log
+
+cd  $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/repozytoria
 mkdir $katalog
 cd $tutaj_jestem
 czas="`date +%d-%m-%Y` `date +%T`"
 echo $czas "utworzenie katalogu $katalog">>skrypt.log
 
 cd $tutaj_jestem
-cp -r $cel $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/$katalog
+cp -r $cel $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/repozytoria/$katalog
 czas="`date +%d-%m-%Y` `date +%T`"
-echo $czas "utworzenie kopii lokalnej i zapisanie jej w $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/$katalog">>skrypt.log
+echo $czas "utworzenie kopii lokalnej i zapisanie jej w $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/repozytoria/$katalog">>skrypt.log
+
+
 else
 cd $katalog_z_kopiami
 mkdir kopie_zdalne
@@ -422,6 +465,13 @@ czas="`date +%d-%m-%Y` `date +%T`"
 echo $czas "utworzenie katalogu okres$numer_okresu-$start_okres-$koniec_okres">>skrypt.log
 
 cd $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres
+mkdir repozytoria
+cd $tutaj_jestem
+
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "utworzenie katalogu repozytoria">>skrypt.log
+
+cd $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/repozytoria
 mkdir $katalog
 
 cd $tutaj_jestem
@@ -429,11 +479,115 @@ czas="`date +%d-%m-%Y` `date +%T`"
 echo $czas "utworzenie katalogu $katalog">>skrypt.log
 
 cd $tutaj_jestem
-cp -r $cel $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/$katalog
+cp -r $cel $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/repozytoria/$katalog
 czas="`date +%d-%m-%Y` `date +%T`"
-echo $czas "utworzenie kopii lokalnej i zapisanie jej w $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/$katalog">>skrypt.log
+echo $czas "utworzenie kopii lokalnej i zapisanie jej w $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/repozytoria/$katalog">>skrypt.log
 fi
 
+
+
+else
+cd $tutaj_jestem
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "kopiowany katalog to zwykły katalog">>skrypt.log
+
+if [[ -x $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/katalogi/$katalog ]]; then
+cp -r $cel $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/katalogi/$katalog
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "utworzenie kopii lokalnej i zapisanie jej w $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/katalogi/$katalog">>skrypt.log
+
+elif [[ -x $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/katalogi ]]; then
+cd $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/katalogi
+mkdir $katalog
+cd $tutaj_jestem
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "utworzenie katalogu $katalog">>skrypt.log
+cp -r $cel $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/katalogi/$katalog
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "utworzenie kopii lokalnej i zapisanie jej w $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/katalogi/$katalog">>skrypt.log
+
+elif [[ -x $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres ]]; then
+cd $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres
+mkdir katalogi
+cd $tutaj_jestem
+
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "utworzenie katalogu katalogi">>skrypt.log
+
+
+cd  $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/katalogi
+mkdir $katalog
+cd $tutaj_jestem
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "utworzenie katalogu $katalog">>skrypt.log
+
+cd $tutaj_jestem
+cp -r $cel $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/katalogi/$katalog
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "utworzenie kopii lokalnej i zapisanie jej w $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/katalogi/$katalog">>skrypt.log
+
+elif [[ -x $katalog_z_kopiami/kopie_zdalne/ ]]; then
+cd $katalog_z_kopiami/kopie_zdalne/
+mkdir okres$numer_okresu-$start_okres-$koniec_okres
+cd $tutaj_jestem
+
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "utworzenie katalogu okres$numer_okresu-$start_okres-$koniec_okres">>skrypt.log
+
+cd $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres
+mkdir katalogi
+cd $tutaj_jestem
+
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "utworzenie katalogu katalogi">>skrypt.log
+
+cd  $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/katalogi
+mkdir $katalog
+cd $tutaj_jestem
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "utworzenie katalogu $katalog">>skrypt.log
+
+cd $tutaj_jestem
+cp -r $cel $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/katalogi/$katalog
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "utworzenie kopii lokalnej i zapisanie jej w $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/katalogi/$katalog">>skrypt.log
+
+
+else
+cd $katalog_z_kopiami
+mkdir kopie_zdalne
+
+cd $tutaj_jestem
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "utworzenie katalogu kopie_zdalne">>skrypt.log
+
+cd $katalog_z_kopiami/kopie_zdalne
+mkdir okres$numer_okresu-$start_okres-$koniec_okres
+
+cd $tutaj_jestem
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "utworzenie katalogu okres$numer_okresu-$start_okres-$koniec_okres">>skrypt.log
+
+cd $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres
+mkdir katalogi
+cd $tutaj_jestem
+
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "utworzenie katalogu katalogi">>skrypt.log
+
+cd $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/katalogi
+mkdir $katalog
+
+cd $tutaj_jestem
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "utworzenie katalogu $katalog">>skrypt.log
+
+cd $tutaj_jestem
+cp -r $cel $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/katalogi/$katalog
+czas="`date +%d-%m-%Y` `date +%T`"
+echo $czas "utworzenie kopii lokalnej i zapisanie jej w $katalog_z_kopiami/kopie_zdalne/okres$numer_okresu-$start_okres-$koniec_okres/katalogi/$katalog">>skrypt.log
+fi
+fi
 
 cd $tutaj_jestem
 
